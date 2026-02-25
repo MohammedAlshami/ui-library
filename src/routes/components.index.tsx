@@ -52,7 +52,7 @@ function ComponentsPage() {
             )}
             <Link
               to="/components/$componentId"
-              params={{ componentId: c.id }}
+              params={{ componentId: c.uuid }}
               className="relative block w-full flex-1 overflow-hidden"
               aria-label={c.name}
             >

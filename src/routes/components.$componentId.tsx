@@ -1,6 +1,6 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState } from 'react'
-import { getComponentById } from '~/data/components'
+import { getComponentByParam } from '~/data/components'
 
 export const Route = createFileRoute('/components/$componentId')({
   component: ComponentDetailPage,
@@ -11,9 +11,7 @@ export const Route = createFileRoute('/components/$componentId')({
 
 function ComponentDetailPage() {
   const { componentId } = Route.useParams()
-  const { fullscreen } = Route.useSearch({ strict: false }) ?? {}
-  const navigate = useNavigate()
-  const record = getComponentById(componentId)
+  const record = getComponentByParam(componentId)
   const [codePanelOpen, setCodePanelOpen] = useState(false)
   const [refreshKey, setRefreshKey] = useState(0)
 
@@ -35,20 +33,12 @@ function ComponentDetailPage() {
     void navigator.clipboard.writeText(record.code)
   }
 
-  const toggleFullScreen = () => {
-    if (fullscreen) {
-      navigate({ to: '/components/$componentId', params: { componentId }, search: {} })
-    } else {
-      navigate({ to: '/components/$componentId', params: { componentId }, search: { fullscreen: true } })
-    }
-  }
-
   return (
-    <div className="relative flex w-full flex-row items-start">
+    <div className="relative flex h-full min-h-0 w-full flex-row items-stretch overflow-hidden">
       {/* Left code panel - when closed, absolute so it doesn't affect page height */}
       <div
         className={`flex shrink-0 overflow-hidden border-r border-gray-200 bg-white transition-[width] duration-300 ease-out ${!codePanelOpen ? 'absolute left-0 top-0' : ''}`}
-        style={{ width: codePanelOpen ? '50%' : '0', minWidth: codePanelOpen ? 320 : 0 }}
+        style={{ width: codePanelOpen ? '50%' : '0', minWidth: codePanelOpen ? 320 : 0, height: codePanelOpen ? '100%' : undefined }}
       >
         <div className="flex h-full w-full min-w-[320px] flex-col bg-gray-100 p-2">
           {/* Drag handle */}
@@ -131,36 +121,13 @@ function ComponentDetailPage() {
 
       {/* Main content - gets pushed right when panel opens */}
       <div className="flex min-w-0 flex-1 flex-col min-h-0">
-        {/* Back to list - hidden in fullscreen */}
-        {!fullscreen && (
-          <div className="fixed left-4 top-4 z-20 lg:hidden">
-            <Link
-              to="/components"
-              className="flex size-10 items-center justify-center rounded-xl border border-gray-200 bg-white shadow-sm"
-              aria-label="Back to components"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="m15 18-6-6 6-6" />
-              </svg>
-            </Link>
-          </div>
-        )}
-
-        {/* Floating toolbar: Full screen + Code */}
-        <section className="fixed right-6 top-4 z-[99] flex flex-col gap-1.5 rounded-2xl border border-gray-200 bg-white p-1.5 shadow-lg">
-          <button
-            type="button"
-            onClick={toggleFullScreen}
-            className={`flex size-8 items-center justify-center rounded-xl transition hover:bg-gray-200 ${fullscreen ? 'bg-gray-200' : 'bg-gray-100'}`}
-            title={fullscreen ? 'Exit full screen' : 'Full screen preview'}
+        {/* Floating toolbar: Back + Restart + Code */}
+        <section className="fixed left-6 top-4 z-[99] flex flex-col gap-1.5 rounded-2xl border border-gray-200 bg-white p-1.5 shadow-lg">
+          <Link
+            to="/components"
+            className="flex size-8 items-center justify-center rounded-xl bg-gray-100 transition hover:bg-gray-200"
+            title="Back to components"
+            aria-label="Back to components"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -171,16 +138,13 @@ function ComponentDetailPage() {
               stroke="currentColor"
               strokeWidth="2"
             >
-              <path d="M8 3H5a2 2 0 0 0-2 2v3" />
-              <path d="M21 8V5a2 2 0 0 0-2-2h-3" />
-              <path d="M3 16v3a2 2 0 0 0 2 2h3" />
-              <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
+              <path d="m15 18-6-6 6-6" />
             </svg>
-          </button>
+          </Link>
           <button
             type="button"
             onClick={() => setRefreshKey((k) => k + 1)}
-            className="flex size-8 items-center justify-center rounded-xl bg-gray-100 transition hover:bg-gray-200"
+            className="flex size-8 items-center justify-center rounded-xl cursor-pointer bg-gray-100 transition hover:bg-gray-200"
             title="Restart component"
           >
             <svg
@@ -203,7 +167,7 @@ function ComponentDetailPage() {
           <button
             type="button"
             onClick={() => setCodePanelOpen(!codePanelOpen)}
-            className={`flex size-8 items-center justify-center rounded-xl transition hover:bg-gray-200 ${
+            className={`flex size-8 items-center justify-center rounded-xl cursor-pointer transition hover:bg-gray-200 ${
               codePanelOpen ? 'bg-gray-200' : 'bg-gray-100'
             }`}
             title="Source code"
@@ -224,8 +188,8 @@ function ComponentDetailPage() {
           </button>
         </section>
 
-        {/* Preview - the component itself (key forces remount on restart) */}
-        <div>
+        {/* Preview - the component itself (key forces remount on restart); flex-1 min-h-0 + overflow-auto = fill space and scroll inside only */}
+        <div className="min-h-0 flex-1 overflow-auto">
           <PreviewComponent key={refreshKey} />
         </div>
       </div>

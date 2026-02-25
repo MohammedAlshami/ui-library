@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { AISearch } from '~/components/AISearch'
 import { ShopTheLook } from '~/components/ShopTheLook'
 
 export const IMAGE_BASE = 'https://cdn.skiper-ui.com'
@@ -134,19 +135,56 @@ export function ShopTheLook() {
 }
 `
 
-/** Dummy component used for all entries until real components are added. Renders as the full preview area. */
-function DummyPreview({ name }: { name: string }) {
+const AI_SEARCH_CODE = `import { useState, useRef, useEffect } from 'react'
+
+export function AISearch() {
+  const [tooltipVisible, setTooltipVisible] = useState(false)
+  const [mainMenuOpen, setMainMenuOpen] = useState(false)
+  const [subMenuOpen, setSubMenuOpen] = useState(false)
+  const [voiceMode, setVoiceMode] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setMainMenuOpen(false)
+        setSubMenuOpen(false)
+      }
+    }
+    document.addEventListener('click', handleClickOutside)
+    return () => document.removeEventListener('click', handleClickOutside)
+  }, [])
+
   return (
-    <div
-      id="preview"
-      className="flex min-h-screen w-full flex-1 items-center justify-center bg-[#f5f4f3] p-6"
-    >
-      <p className="text-center text-gray-500">
-        Preview: <span className="font-medium text-gray-700">{name}</span>
-      </p>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-white p-4">
+      <h1 className="mb-10 text-3xl font-normal tracking-tight text-gray-800 md:text-4xl">
+        Ready when you are.
+      </h1>
+      <div className="relative w-full max-w-2xl" ref={containerRef}>
+        {/* Tooltip, pill search bar (plus, input, mic, audio), main dropdown, sub dropdown, voice state */}
+        <div className="flex items-center rounded-full border border-gray-200 bg-white px-4 py-2 shadow-sm">
+          {!voiceMode ? (
+            <>
+              <button type="button" onMouseEnter={() => setTooltipVisible(true)} onMouseLeave={() => setTooltipVisible(false)} onClick={() => { setMainMenuOpen((o) => !o); setSubMenuOpen(false); }}>+</button>
+              <input type="text" placeholder="Ask anything" className="flex-grow bg-transparent px-2 text-lg outline-none" />
+              <button type="button" onClick={() => setVoiceMode(true)}>Mic</button>
+            </>
+          ) : (
+            <div className="flex w-full items-center gap-2">
+              <div className="flex-grow border-t border-dotted border-gray-300" />
+              <div className="flex gap-1"><div className="aisearch-wave-bar w-0.5 rounded-full bg-black" />...</div>
+              <button type="button" onClick={() => setVoiceMode(false)}>Cancel</button>
+              <button type="button" onClick={() => setVoiceMode(false)}>Submit</button>
+            </div>
+          )}
+        </div>
+        {mainMenuOpen && <div className="absolute left-0 mt-2 w-64 rounded-2xl border bg-white py-2 shadow-lg">Add photos & files, Create image, Thinking, Deep research, Shopping research, More (submenu)</div>}
+        {subMenuOpen && <div className="absolute left-64 mt-2 ml-2 w-56 rounded-2xl border bg-white py-2 shadow-lg">Web search, Study and learn, Canvas, Quizzes, Explore apps</div>}
+      </div>
     </div>
   )
 }
+`
 
 export interface ComponentRecord {
   uuid: string
@@ -157,16 +195,6 @@ export interface ComponentRecord {
   code: string
   premium?: boolean
 }
-
-const DUMMY_CODE = (id: string, name: string) => `// ${name} – placeholder
-export function Example() {
-  return (
-    <div className="p-4 rounded-lg border border-gray-200">
-      <p>${name} component</p>
-    </div>
-  )
-}
-`
 
 export const COMPONENTS: ComponentRecord[] = [
   {
@@ -180,75 +208,12 @@ export const COMPONENTS: ComponentRecord[] = [
   },
   {
     uuid: 'a1b2c3d4-e5f6-4a5b-8c9d-0e1f2a3b4c5d',
-    id: 'skiper71',
-    name: 'Image reveal',
-    premium: true,
-    image: `${IMAGE_BASE}/video/v1/thumb/skiper71.webp`,
-    component: () => <DummyPreview name="Image reveal" />,
-    code: DUMMY_CODE('skiper71', 'Image reveal'),
-  },
-  {
-    uuid: 'b2c3d4e5-f6a7-5b6c-9d0e-1f2a3b4c5d6e',
-    id: 'skiper6',
-    name: 'Hover members',
-    premium: true,
-    image: `${IMAGE_BASE}/video/v1/thumb/skiper6.webp`,
-    component: () => <DummyPreview name="Hover members" />,
-    code: DUMMY_CODE('skiper6', 'Hover members'),
-  },
-  {
-    uuid: 'c3d4e5f6-a7b8-6c7d-0e1f-2a3b4c5d6e7f',
-    id: 'skiper5',
-    name: 'Things drag and scroll',
-    premium: true,
-    image: `${IMAGE_BASE}/video/v1/thumb/skiper5.webp`,
-    component: () => <DummyPreview name="Things drag and scroll" />,
-    code: DUMMY_CODE('skiper5', 'Things drag and scroll'),
-  },
-  {
-    uuid: 'd4e5f6a7-b8c9-7d8e-1f2a-3b4c5d6e7f8a',
-    id: 'skiper56',
-    name: 'Devouring details sign in',
-    premium: true,
-    image: `${IMAGE_BASE}/video/v1/thumb/skiper56.webp`,
-    component: () => <DummyPreview name="Devouring details sign in" />,
-    code: DUMMY_CODE('skiper56', 'Devouring details sign in'),
-  },
-  {
-    uuid: 'e5f6a7b8-c9d0-8e9f-2a3b-4c5d6e7f8a9b',
-    id: 'skiper2',
-    name: 'Dynamic island',
+    id: 'ai-search',
+    name: 'AI Search',
     premium: false,
-    image: `${IMAGE_BASE}/video/v1/thumb/skiper2.webp`,
-    component: () => <DummyPreview name="Dynamic island" />,
-    code: DUMMY_CODE('skiper2', 'Dynamic island'),
-  },
-  {
-    uuid: 'f6a7b8c9-d0e1-9f0a-3b4c-5d6e7f8a9b0c',
-    id: 'skiper43',
-    name: 'Vercel Tooltip',
-    premium: true,
-    image: `${IMAGE_BASE}/video/v1/thumb/skiper43.webp`,
-    component: () => <DummyPreview name="Vercel Tooltip" />,
-    code: DUMMY_CODE('skiper43', 'Vercel Tooltip'),
-  },
-  {
-    uuid: 'a7b8c9d0-e1f2-0a1b-4c5d-6e7f8a9b0c1d',
-    id: 'skiper22',
-    name: 'Aave token swap',
-    premium: true,
-    image: `${IMAGE_BASE}/video/v1/thumb/skiper22.webp`,
-    component: () => <DummyPreview name="Aave token swap" />,
-    code: DUMMY_CODE('skiper22', 'Aave token swap'),
-  },
-  {
-    uuid: 'b8c9d0e1-f2a3-1b2c-5d6e-7f8a9b0c1d2e',
-    id: 'skiper18',
-    name: 'Image cursor trail',
-    premium: true,
-    image: `${IMAGE_BASE}/video/v1/thumb/skiper18.webp`,
-    component: () => <DummyPreview name="Image cursor trail" />,
-    code: DUMMY_CODE('skiper18', 'Image cursor trail'),
+    image: '/ai-search-preview.png',
+    component: () => <AISearch />,
+    code: AI_SEARCH_CODE,
   },
 ]
 
@@ -256,8 +221,17 @@ export function getComponentById(id: string): ComponentRecord | undefined {
   return COMPONENTS.find((c) => c.id === id)
 }
 
+export function getComponentByUuid(uuid: string): ComponentRecord | undefined {
+  return COMPONENTS.find((c) => c.uuid === uuid)
+}
+
+/** Resolve component by route param: supports both uuid (preferred) and legacy id slug */
+export function getComponentByParam(param: string): ComponentRecord | undefined {
+  return getComponentByUuid(param) ?? getComponentById(param)
+}
+
 export function getPrevNext(id: string) {
-  const i = COMPONENTS.findIndex((c) => c.id === id)
+  const i = COMPONENTS.findIndex((c) => c.uuid === id || c.id === id)
   if (i < 0) return { prev: null, next: null }
   return {
     prev: i > 0 ? COMPONENTS[i - 1]! : null,

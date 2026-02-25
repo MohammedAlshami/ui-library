@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { createPortal } from 'react-dom'
 
 const BG_IMAGE =
   'https://reformation-main.myshopify.com/cdn/shop/files/shop-the-look.jpg?v=1662464598&width=1920'
@@ -77,11 +78,12 @@ export function ShopTheLook() {
   }
 
   return (
-    <div className="w-full bg-[#f5f4f3]">
+    <div className="flex h-full min-h-full w-full items-center justify-center bg-[#f5f4f3]">
       <section
         id="preview"
-        className="relative mx-auto flex h-[33rem] w-full max-w-[1200px] overflow-hidden bg-[#f5f4f3]"
+        className="relative mx-auto flex min-h-full w-full max-w-[1200px] flex-1 flex-col justify-center overflow-hidden bg-[#f5f4f3]"
       >
+        <div className="flex h-[33rem] w-full max-h-[90vh] overflow-hidden">
       {/* Left: background image with hotspots */}
       <div className="relative h-full flex-1 overflow-hidden">
         <img
@@ -152,133 +154,144 @@ export function ShopTheLook() {
         ))}
       </div>
 
-      {/* Right: slide-in product panel */}
-      <div
-        className={`flex h-full shrink-0 flex-col border-l border-gray-200 bg-white shadow-xl transition-[width] duration-300 ease-out ${
-          openProduct ? 'w-full md:w-[420px]' : 'w-0 overflow-hidden'
-        }`}
-      >
-        {openProduct && (
-          <>
-            <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4">
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
-                Select options
-              </h2>
-              <button
-                type="button"
-                onClick={() => setOpenProduct(null)}
-                className="flex size-8 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                aria-label="Close"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
+      {/* Side panel rendered via portal on top of the entire page */}
+      {typeof document !== 'undefined' &&
+        openProduct &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[9999] flex justify-end"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Product options"
+          >
+            <button
+              type="button"
+              className="absolute inset-0 bg-black/20"
+              aria-label="Close panel"
+              onClick={() => setOpenProduct(null)}
+            />
+            <div className="relative z-10 flex h-full w-full max-w-[420px] flex-col border-l border-gray-200 bg-white shadow-2xl">
+              <div className="flex shrink-0 items-center justify-between border-b border-gray-200 px-5 py-4">
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
+                  Select options
+                </h2>
+                <button
+                  type="button"
+                  onClick={() => setOpenProduct(null)}
+                  className="flex size-8 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                  aria-label="Close"
                 >
-                  <path d="M18 6 6 18" />
-                  <path d="m6 6 12 12" />
-                </svg>
-              </button>
-            </div>
-            <div className="min-h-0 flex-1 overflow-y-auto p-5">
-              <div className="flex gap-4">
-                <img
-                  src={openProduct.image}
-                  alt=""
-                  className="h-32 w-28 shrink-0 object-cover"
-                />
-                <div className="min-w-0 flex-1">
-                  <h3 className="font-medium text-gray-900">{openProduct.name}</h3>
-                  <p className="mt-1 text-lg font-medium text-gray-900">
-                    {openProduct.price}
-                  </p>
-                  <p className="mt-1 text-sm text-gray-500">
-                    Shipping calculated at checkout.
-                  </p>
-                </div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M18 6 6 18" />
+                    <path d="m6 6 12 12" />
+                  </svg>
+                </button>
               </div>
-              {openProduct.colors && openProduct.colors.length > 0 && (
-                <div className="mt-5">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-gray-600">
-                    Color: {openProduct.colors[0]}
-                  </p>
-                </div>
-              )}
-              {openProduct.sizes && openProduct.sizes.length > 0 && (
-                <div className="mt-4">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-gray-600">
-                    Size
-                  </p>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {openProduct.sizes.map((size) => (
-                      <button
-                        key={size}
-                        type="button"
-                        onClick={() => setSelectedSize(size)}
-                        className={`min-w-[2.5rem] rounded border px-3 py-2 text-sm font-medium transition ${
-                          selectedSize === size
-                            ? 'border-gray-900 bg-gray-900 text-white'
-                            : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
-                        }`}
-                      >
-                        {size}
-                      </button>
-                    ))}
+              <div className="min-h-0 flex-1 overflow-y-auto p-5">
+                <div className="flex gap-4">
+                  <img
+                    src={openProduct.image}
+                    alt=""
+                    className="h-32 w-28 shrink-0 object-cover"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-medium text-gray-900">{openProduct.name}</h3>
+                    <p className="mt-1 text-lg font-medium text-gray-900">
+                      {openProduct.price}
+                    </p>
+                    <p className="mt-1 text-sm text-gray-500">
+                      Shipping calculated at checkout.
+                    </p>
                   </div>
                 </div>
-              )}
-              <div className="mt-4 flex items-center gap-2">
-                <span className="text-xs font-semibold uppercase tracking-wide text-gray-600">
-                  Quantity
-                </span>
-                <div className="flex items-center rounded border border-gray-300">
-                  <button
-                    type="button"
-                    onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                    className="px-3 py-1.5 text-gray-600 hover:bg-gray-100"
-                  >
-                    −
-                  </button>
-                  <span className="min-w-[2rem] text-center text-sm">
-                    {quantity}
+                {openProduct.colors && openProduct.colors.length > 0 && (
+                  <div className="mt-5">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-gray-600">
+                      Color: {openProduct.colors[0]}
+                    </p>
+                  </div>
+                )}
+                {openProduct.sizes && openProduct.sizes.length > 0 && (
+                  <div className="mt-4">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-gray-600">
+                      Size
+                    </p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {openProduct.sizes.map((size) => (
+                        <button
+                          key={size}
+                          type="button"
+                          onClick={() => setSelectedSize(size)}
+                          className={`min-w-[2.5rem] rounded border px-3 py-2 text-sm font-medium transition ${
+                            selectedSize === size
+                              ? 'border-gray-900 bg-gray-900 text-white'
+                              : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
+                          }`}
+                        >
+                          {size}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <div className="mt-4 flex items-center gap-2">
+                  <span className="text-xs font-semibold uppercase tracking-wide text-gray-600">
+                    Quantity
                   </span>
+                  <div className="flex items-center rounded border border-gray-300">
+                    <button
+                      type="button"
+                      onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                      className="px-3 py-1.5 text-gray-600 hover:bg-gray-100"
+                    >
+                      −
+                    </button>
+                    <span className="min-w-[2rem] text-center text-sm">
+                      {quantity}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setQuantity((q) => q + 1)}
+                      className="px-3 py-1.5 text-gray-600 hover:bg-gray-100"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+                <div className="mt-6 flex flex-col gap-2">
                   <button
                     type="button"
-                    onClick={() => setQuantity((q) => q + 1)}
-                    className="px-3 py-1.5 text-gray-600 hover:bg-gray-100"
+                    className="w-full rounded bg-gray-900 py-3 text-sm font-medium text-white hover:bg-gray-800"
                   >
-                    +
+                    Add to cart
+                  </button>
+                  <button
+                    type="button"
+                    className="w-full rounded border border-gray-900 py-3 text-sm font-medium text-gray-900 hover:bg-gray-50"
+                  >
+                    Buy it now
                   </button>
                 </div>
-              </div>
-              <div className="mt-6 flex flex-col gap-2">
                 <button
                   type="button"
-                  className="w-full rounded bg-gray-900 py-3 text-sm font-medium text-white hover:bg-gray-800"
+                  className="mt-3 text-sm text-gray-600 underline hover:no-underline"
                 >
-                  Add to cart
-                </button>
-                <button
-                  type="button"
-                  className="w-full rounded border border-gray-900 py-3 text-sm font-medium text-gray-900 hover:bg-gray-50"
-                >
-                  Buy it now
+                  View product details
                 </button>
               </div>
-              <button
-                type="button"
-                className="mt-3 text-sm text-gray-600 underline hover:no-underline"
-              >
-                View product details
-              </button>
             </div>
-          </>
+          </div>,
+          document.body,
         )}
-      </div>
+        </div>
     </section>
     </div>
   )

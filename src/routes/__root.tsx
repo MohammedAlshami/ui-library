@@ -137,7 +137,17 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             </nav>
           </header>
         )}
-        <main className={showHeader ? 'pt-[72px]' : ''}>{children}</main>
+        <main
+          className={
+            isComponentDetailPage
+              ? 'h-screen overflow-hidden'
+              : showHeader
+                ? 'pt-[72px]'
+                : ''
+          }
+        >
+          {children}
+        </main>
         <TanStackRouterDevtools position="bottom-right" />
         <Scripts />
       </body>
