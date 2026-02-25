@@ -1,0 +1,78 @@
+@import 'tailwindcss' source('../');
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  }
+
+  * {
+    @apply border-gray-200 dark:border-gray-800;
+  }
+
+  html,
+  body {
+    @apply text-gray-900 bg-white dark:bg-gray-950 dark:text-gray-200 antialiased;
+  }
+
+  .using-mouse * {
+    outline: none !important;
+  }
+}
+
+/* Skiper-style utilities */
+@layer utilities {
+  .font-custom {
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  }
+  .shadow-glass {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+
+@keyframes shop-the-look-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+  }
+  50% {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 8px rgba(255, 255, 255, 0);
+  }
+}
+.shop-the-look-pulse {
+  animation: shop-the-look-pulse 2s ease-in-out infinite;
+}
+
+.docs-h3 {
+  @apply text-lg font-semibold tracking-tight;
+}
+.docs-p {
+  @apply text-sm leading-relaxed text-gray-600 lg:text-base;
+}
+.docs-code-wrapper {
+  @apply relative rounded-lg border border-gray-200 bg-gray-50;
+}
