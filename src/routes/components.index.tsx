@@ -53,6 +53,7 @@ function ComponentsPage() {
             <Link
               to="/components/$componentId"
               params={{ componentId: c.uuid }}
+              search={{ fullscreen: false }}
               className="relative block w-full flex-1 overflow-hidden"
               aria-label={c.name}
             >

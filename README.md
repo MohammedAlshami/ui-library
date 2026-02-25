@@ -34,3 +34,33 @@ To build the app for production:
 ```sh
 pnpm build
 ```
+
+## Deploy to Cloudflare Pages
+
+This app can be deployed to Cloudflare Pages with Nitro's `cloudflare_pages` preset.
+
+1. Build for Cloudflare:
+
+```sh
+pnpm build:cloudflare
+```
+
+2. (Optional) Preview locally using Wrangler:
+
+```sh
+pnpm preview:cloudflare
+```
+
+3. Deploy manually:
+
+```sh
+npx wrangler --cwd dist/ pages deploy
+```
+
+If you deploy from the Cloudflare dashboard/Git integration, set the build command to:
+
+```sh
+NITRO_PRESET=cloudflare_pages pnpm build
+```
+
+The small `0.00 kB` modules in Nitro output are expected for re-export/placeholder chunks and are not deployment errors by themselves.
