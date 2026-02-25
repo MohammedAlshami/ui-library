@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { AISearch } from '~/components/AISearch'
 import { ShopTheLook } from '~/components/ShopTheLook'
+import { CategorySlidesSection } from '~/components/CategorySlidesSection'
 
 export const IMAGE_BASE = 'https://cdn.skiper-ui.com'
 
@@ -186,6 +187,42 @@ export function AISearch() {
 }
 `
 
+
+const CATEGORY_SLIDES_SECTION_CODE = `import { useMemo, useRef, useState } from 'react'
+
+type Audience = 'boys' | 'girls'
+
+interface CategoryItem { id: string; name: string; count: number; image: string }
+
+const BOYS_CATEGORIES: CategoryItem[] = [
+  { id: 'sweaters', name: 'Sweaters', count: 25, image: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=80' },
+  { id: 'sets', name: 'Sets', count: 30, image: 'https://images.unsplash.com/photo-1519340241574-2cec6aef0c01?auto=format&fit=crop&w=1200&q=80' },
+  { id: 'tshirts', name: 'T-Shirts', count: 21, image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1200&q=80' },
+  { id: 'shirts', name: 'Shirts', count: 35, image: 'https://images.unsplash.com/photo-1503919545889-aef636e10ad4?auto=format&fit=crop&w=1200&q=80' },
+]
+
+const GIRLS_CATEGORIES: CategoryItem[] = [
+  { id: 'dresses', name: 'Dresses', count: 16, image: 'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=1200&q=80' },
+  { id: 'bags', name: 'Bags', count: 21, image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=1200&q=80' },
+]
+
+export function CategorySlidesSection() {
+  const [audience, setAudience] = useState<Audience>('boys')
+  const [progress, setProgress] = useState(0)
+  const listRef = useRef<HTMLDivElement>(null)
+  const categories = useMemo(() => (audience === 'boys' ? BOYS_CATEGORIES : GIRLS_CATEGORIES), [audience])
+
+  const updateProgress = () => {
+    const node = listRef.current
+    if (!node) return
+    const maxScrollable = node.scrollWidth - node.clientWidth
+    setProgress(maxScrollable <= 0 ? 0 : node.scrollLeft / maxScrollable)
+  }
+
+  return <section>...</section>
+}
+`
+
 export interface ComponentRecord {
   uuid: string
   id: string
@@ -205,6 +242,15 @@ export const COMPONENTS: ComponentRecord[] = [
     image: 'https://reformation-main.myshopify.com/cdn/shop/files/shop-the-look.jpg?v=1662464598&width=600',
     component: () => <ShopTheLook />,
     code: SHOP_THE_LOOK_CODE,
+  },
+  {
+    uuid: 'f4e2c1b0-a9d8-47c6-9e5f-1234567890ab',
+    id: 'category-slides-section',
+    name: 'Category Slides Section',
+    premium: false,
+    image: 'https://images.unsplash.com/photo-1519340241574-2cec6aef0c01?auto=format&fit=crop&w=900&q=80',
+    component: () => <CategorySlidesSection />,
+    code: CATEGORY_SLIDES_SECTION_CODE,
   },
   {
     uuid: 'a1b2c3d4-e5f6-4a5b-8c9d-0e1f2a3b4c5d',
