@@ -3,6 +3,7 @@ import { AISearch } from '~/components/AISearch'
 import { ShopTheLook } from '~/components/ShopTheLook'
 import { CategorySlidesSection } from '~/components/CategorySlidesSection'
 import { WhatsHappeningCarousel } from '~/components/WhatsHappeningCarousel'
+import { WhatsAppReplica } from '~/components/WhatsAppReplica'
 
 export const IMAGE_BASE = 'https://cdn.skiper-ui.com'
 
@@ -257,6 +258,21 @@ export function WhatsHappeningCarousel() {
 }
 `
 
+const WHATSAPP_REPLICA_CODE = `import { useState } from 'react'
+
+export function WhatsAppReplica() {
+  const [view, setView] = useState<'chats' | 'conversation' | 'groupInfo'>('chats')
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-[#121212] p-8">
+      <div className="relative h-[860px] w-[420px] overflow-hidden rounded-[48px] border-[12px] border-black bg-white shadow-[0_30px_80px_rgba(0,0,0,0.5)]">
+        {/* WhatsApp-inspired UI inside a phone mockup */}
+      </div>
+    </div>
+  )
+}
+`
+
 export interface ComponentRecord {
   uuid: string
   id: string
@@ -294,6 +310,15 @@ export const COMPONENTS: ComponentRecord[] = [
     image: '/ai-search-preview.png',
     component: () => <AISearch />,
     code: AI_SEARCH_CODE,
+  },
+  {
+    uuid: 'd97ca7db-9f99-45a0-a6fe-2f8f5cc57fca',
+    id: 'whatsapp-replica',
+    name: 'WhatsApp Replica',
+    premium: false,
+    image: 'https://images.unsplash.com/photo-1611606063065-ee7946f0787a?auto=format&fit=crop&w=900&q=80',
+    component: () => <WhatsAppReplica />,
+    code: WHATSAPP_REPLICA_CODE,
   },
   {
     uuid: 'b7a4f0a1-c6f3-4f47-a67f-2f7d43f95e43',
