@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { AISearch } from '~/components/AISearch'
 import { ShopTheLook } from '~/components/ShopTheLook'
 import { CategorySlidesSection } from '~/components/CategorySlidesSection'
+import { WhatsHappeningCarousel } from '~/components/WhatsHappeningCarousel'
 
 export const IMAGE_BASE = 'https://cdn.skiper-ui.com'
 
@@ -223,6 +224,39 @@ export function CategorySlidesSection() {
 }
 `
 
+const WHATS_HAPPENING_CAROUSEL_CODE = `import { useRef, useState } from 'react'
+
+interface NewsCard {
+  id: string
+  title: string
+  description: string
+  cta: string
+  image: string
+  logoText?: string
+}
+
+const NEWS_CARDS: NewsCard[] = [
+  // ... cards omitted for brevity
+]
+
+export function WhatsHappeningCarousel() {
+  const [activeIndex, setActiveIndex] = useState(0)
+  const mobileTrackRef = useRef<HTMLDivElement>(null)
+
+  const onMobileScroll = () => {
+    const track = mobileTrackRef.current
+    if (!track) return
+    // determine nearest card index
+  }
+
+  return (
+    <section className="min-h-full w-full bg-[#eef1f6] py-10 md:py-16">
+      {/* Responsive desktop + mobile carousel layout */}
+    </section>
+  )
+}
+`
+
 export interface ComponentRecord {
   uuid: string
   id: string
@@ -260,6 +294,16 @@ export const COMPONENTS: ComponentRecord[] = [
     image: '/ai-search-preview.png',
     component: () => <AISearch />,
     code: AI_SEARCH_CODE,
+  },
+  {
+    uuid: 'b7a4f0a1-c6f3-4f47-a67f-2f7d43f95e43',
+    id: 'whats-happening-carousel',
+    name: "What's Happening Carousel",
+    premium: false,
+    image:
+      'https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&w=900&q=80',
+    component: () => <WhatsHappeningCarousel />,
+    code: WHATS_HAPPENING_CAROUSEL_CODE,
   },
 ]
 
