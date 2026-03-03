@@ -4,6 +4,7 @@ import { ShopTheLook } from '~/components/ShopTheLook'
 import { CategorySlidesSection } from '~/components/CategorySlidesSection'
 import { WhatsHappeningCarousel } from '~/components/WhatsHappeningCarousel'
 import { WhatsAppReplica } from '~/components/WhatsAppReplica'
+import { SimpleButton } from '~/components/SimpleButton'
 
 export const IMAGE_BASE = 'https://cdn.skiper-ui.com'
 
@@ -273,6 +274,25 @@ export function WhatsAppReplica() {
 }
 `
 
+const SIMPLE_BUTTON_CODE = `import { useState } from 'react'
+
+export function SimpleButton() {
+  const [count, setCount] = useState(0)
+
+  return (
+    <div className="flex min-h-screen w-full items-center justify-center bg-slate-50 p-6">
+      <button
+        type="button"
+        className="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow transition hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+        onClick={() => setCount((value) => value + 1)}
+      >
+        Click me{count > 0 ? \` (\${count})\` : ''}
+      </button>
+    </div>
+  )
+}
+`
+
 export interface ComponentRecord {
   uuid: string
   id: string
@@ -319,6 +339,16 @@ export const COMPONENTS: ComponentRecord[] = [
     image: 'https://images.unsplash.com/photo-1611606063065-ee7946f0787a?auto=format&fit=crop&w=900&q=80',
     component: () => <WhatsAppReplica />,
     code: WHATSAPP_REPLICA_CODE,
+  },
+  {
+    uuid: '0f7c4b1e-a961-4fc3-a2d5-47bd18c9e123',
+    id: 'simple-button',
+    name: 'Simple Button',
+    premium: false,
+    image:
+      'https://images.unsplash.com/photo-1516383740770-fbcc5ccbece0?auto=format&fit=crop&w=900&q=80',
+    component: () => <SimpleButton />,
+    code: SIMPLE_BUTTON_CODE,
   },
   {
     uuid: 'b7a4f0a1-c6f3-4f47-a67f-2f7d43f95e43',
