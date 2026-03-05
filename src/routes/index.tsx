@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { useState } from 'react'
 import { COMPONENTS, IMAGE_BASE } from '~/data/components'
 
 export const Route = createFileRoute('/')({
@@ -9,6 +10,8 @@ const HERO_LINE1 = 'UN-COMMON COMPONENTS'
 const HERO_LINE2 = 'FOR SHADCN/UI'
 
 function Home() {
+  const [addCount, setAddCount] = useState(0)
+
   return (
     <div className="flex w-screen flex-col items-center overflow-hidden">
       {/* Top fade */}
@@ -61,6 +64,18 @@ function Home() {
             >
               Quick Start
             </Link>
+          </div>
+          <div className="mt-6 flex items-center gap-3 rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-sm">
+            <span className="text-sm font-medium text-gray-700">
+              Add count: {addCount}
+            </span>
+            <button
+              type="button"
+              onClick={() => setAddCount((previousCount) => previousCount + 1)}
+              className="rounded-xl bg-gray-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-gray-700"
+            >
+              Add
+            </button>
           </div>
         </div>
       </section>
