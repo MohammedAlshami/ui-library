@@ -5,6 +5,7 @@ import { CategorySlidesSection } from '~/components/CategorySlidesSection'
 import { WhatsHappeningCarousel } from '~/components/WhatsHappeningCarousel'
 import { WhatsAppReplica } from '~/components/WhatsAppReplica'
 import { SimpleButton } from '~/components/SimpleButton'
+import { ViewAllButton } from '~/components/ViewAllButton'
 
 export const IMAGE_BASE = 'https://cdn.skiper-ui.com'
 
@@ -293,6 +294,25 @@ export function SimpleButton() {
 }
 `
 
+const VIEW_ALL_BUTTON_CODE = `export function ViewAllButton() {
+  return (
+    <div className="flex min-h-screen w-full items-center justify-center bg-[#d9d9db] p-6">
+      <button
+        type="button"
+        className="bg-gradient-to-r from-[#212123] to-[#141416] px-16 py-7 text-[38px] font-light uppercase tracking-[0.11em] text-white shadow-[0_10px_28px_rgba(0,0,0,0.35)] transition-transform duration-200 hover:scale-[1.015]"
+      >
+        <span className="inline-flex items-center gap-5 leading-none">
+          View all
+          <span aria-hidden="true" className="text-[44px] leading-none">
+            →
+          </span>
+        </span>
+      </button>
+    </div>
+  )
+}
+`
+
 export interface ComponentRecord {
   uuid: string
   id: string
@@ -349,6 +369,16 @@ export const COMPONENTS: ComponentRecord[] = [
       'https://images.unsplash.com/photo-1516383740770-fbcc5ccbece0?auto=format&fit=crop&w=900&q=80',
     component: () => <SimpleButton />,
     code: SIMPLE_BUTTON_CODE,
+  },
+  {
+    uuid: 'f76dbf6f-627f-44d9-a523-bf4af8f99920',
+    id: 'view-all-button',
+    name: 'View All Button',
+    premium: false,
+    image:
+      'https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=900&q=80',
+    component: () => <ViewAllButton />,
+    code: VIEW_ALL_BUTTON_CODE,
   },
   {
     uuid: 'b7a4f0a1-c6f3-4f47-a67f-2f7d43f95e43',
