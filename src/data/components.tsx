@@ -10,6 +10,7 @@ import { AddButton } from '~/components/AddButton'
 import { ProductSearchPanel } from '~/components/ProductSearchPanel'
 import { ViewAllButton } from '~/components/ViewAllButton'
 import { BoohooHeader } from '~/components/BoohooHeader'
+import { TrendingNowIcons } from '~/components/TrendingNowIcons'
 
 export const IMAGE_BASE = 'https://cdn.skiper-ui.com'
 
@@ -259,6 +260,49 @@ export function WhatsHappeningCarousel() {
   return (
     <section className="min-h-full w-full bg-[#eef1f6] py-10 md:py-16">
       {/* Responsive desktop + mobile carousel layout */}
+    </section>
+  )
+}
+`
+
+const TRENDING_NOW_ICONS_CODE = `interface TrendItem {
+  id: string
+  title: string
+  icon: string
+  bgClass: string
+}
+
+const TREND_ITEMS: TrendItem[] = [
+  { id: 'lace-satin', title: 'Lace & Satin Outfits', icon: '✦', bgClass: 'bg-[#efe7e4]' },
+  { id: 'funnel-neck', title: 'Funnel Neck Outfits', icon: '◔', bgClass: 'bg-[#e4ddd8]' },
+  { id: 'polka-dot', title: 'Polka Dot Outfits', icon: '◉', bgClass: 'bg-[#ece8e6]' },
+  { id: 'butter-yellow', title: 'Butter Yellow Outfits', icon: '◌', bgClass: 'bg-[#ecefef]' },
+  { id: 'chocolate', title: 'Chocolate Outfits', icon: '⬣', bgClass: 'bg-[#e7dfda]' },
+  { id: 'suede', title: 'Suede Outfits', icon: '◐', bgClass: 'bg-[#e6ddd5]' },
+  { id: 'striped', title: 'Striped Outfits', icon: '≋', bgClass: 'bg-[#ebeef0]' },
+  { id: 'pastels', title: 'Pastels', icon: '✿', bgClass: 'bg-[#ece8e8]' },
+]
+
+export function TrendingNowIcons() {
+  return (
+    <section className="w-full bg-[#f5f5f5] py-12">
+      <div className="mx-auto w-full max-w-[1400px] px-6">
+        <div className="mb-7 flex flex-col items-center">
+          <h2 className="text-center text-5xl font-semibold tracking-tight text-[#121212]">Trending Now</h2>
+          <span className="mt-4 h-4 w-40 rounded-md bg-[#e8eaee]" />
+        </div>
+
+        <div className="grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-4 lg:grid-cols-8">
+          {TREND_ITEMS.map((item) => (
+            <article key={item.id} className="flex flex-col items-center">
+              <div className={\`flex h-[150px] w-[150px] items-center justify-center rounded-full text-5xl text-[#222] shadow-[inset_0_0_0_1px_rgba(0,0,0,0.03)] \${item.bgClass}\`} aria-hidden="true">
+                <span className="select-none">{item.icon}</span>
+              </div>
+              <p className="mt-4 text-center text-[20px] leading-tight text-[#171717]">{item.title}</p>
+            </article>
+          ))}
+        </div>
+      </div>
     </section>
   )
 }
@@ -619,6 +663,16 @@ export const COMPONENTS: ComponentRecord[] = [
       'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=80',
     component: () => <BoohooHeader />,
     code: BOOHOO_HEADER_CODE,
+  },
+  {
+    uuid: '9e98bb51-6fe1-43e8-ad4f-2a9b22f0ef5a',
+    id: 'trending-now-icons',
+    name: 'Trending Now Icons',
+    premium: false,
+    image:
+      'https://images.unsplash.com/photo-1463100099107-aa0980c362e6?auto=format&fit=crop&w=900&q=80',
+    component: () => <TrendingNowIcons />,
+    code: TRENDING_NOW_ICONS_CODE,
   },
 ]
 
