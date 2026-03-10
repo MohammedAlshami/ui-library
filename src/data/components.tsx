@@ -6,6 +6,7 @@ import { WhatsHappeningCarousel } from '~/components/WhatsHappeningCarousel'
 import { WhatsAppReplica } from '~/components/WhatsAppReplica'
 import { SimpleButton } from '~/components/SimpleButton'
 import { DressesToolbar } from '~/components/DressesToolbar'
+import { BoohooHeader } from '~/components/BoohooHeader'
 
 export const IMAGE_BASE = 'https://cdn.skiper-ui.com'
 
@@ -350,6 +351,31 @@ function ViewIcon({ columns, active = false }: { columns: 2 | 3 | 4; active?: bo
 }
 `
 
+const BOOHOO_HEADER_CODE = `export function BoohooHeader() {
+  return (
+    <div className="flex min-h-screen w-full items-start justify-center bg-white px-4 py-3">
+      <header className="flex w-full max-w-[1920px] items-center justify-between rounded-[28px] bg-[#ececec] px-6 py-4 text-[#121212] md:px-8 lg:px-10">
+        <h1 className="text-3xl leading-none font-black tracking-[-0.04em] lowercase md:text-5xl">
+          boohoo
+        </h1>
+        <div className="mx-4 flex h-16 max-w-[1220px] flex-1 items-center rounded-full bg-[#e2e2e2] px-6 md:mx-10 md:px-8">
+          <input type="text" placeholder="Search Products and Brands" aria-label="Search products and brands" className="w-full bg-transparent text-lg text-[#787878] outline-none placeholder:text-[#8f8f8f] md:text-[44px] md:leading-none" />
+          <div className="ml-4 flex items-center gap-5 text-[#1f1f1f] md:gap-7">
+            <button type="button" aria-label="Image search">📷</button>
+            <button type="button" aria-label="Search">🔍</button>
+          </div>
+        </div>
+        <nav className="flex items-center gap-5 text-[#171717] md:gap-7" aria-label="Account actions">
+          <button type="button" aria-label="Profile">👤</button>
+          <button type="button" aria-label="Wishlist">♡</button>
+          <button type="button" aria-label="Bag">👜</button>
+        </nav>
+      </header>
+    </div>
+  )
+}
+`
+
 export interface ComponentRecord {
   uuid: string
   id: string
@@ -426,6 +452,16 @@ export const COMPONENTS: ComponentRecord[] = [
       'https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&w=900&q=80',
     component: () => <WhatsHappeningCarousel />,
     code: WHATS_HAPPENING_CAROUSEL_CODE,
+  },
+  {
+    uuid: '53ec2a67-b8de-47f8-a1af-84aa8ff44a49',
+    id: 'boohoo-header',
+    name: 'Boohoo Header',
+    premium: false,
+    image:
+      'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=80',
+    component: () => <BoohooHeader />,
+    code: BOOHOO_HEADER_CODE,
   },
 ]
 
